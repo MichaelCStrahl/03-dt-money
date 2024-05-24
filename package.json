@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "lint": "biome check --apply ./src",
     "preview": "vite preview",
-    "prepare": "husky"
+    "prepare": "husky",
+    "dev:server": "json-server server.json -w"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",
@@ -30,6 +31,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "husky": "^9.0.11",
+    "json-server": "^1.0.0-beta.0",
     "typescript": "^5.2.2",
     "vite": "^5.1.6"
   }
