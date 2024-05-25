@@ -1,12 +1,14 @@
-import { type ReactNode, createContext, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
+import { createContext } from "use-context-selector";
 import { api } from "../lib/axios";
 
 interface Transactions {
 	id: number;
 	description: string;
-	price: number;
 	type: "income" | "outcome";
+	price: number;
 	category: string;
+	createdAt: string;
 }
 
 interface TransactionContextType {
