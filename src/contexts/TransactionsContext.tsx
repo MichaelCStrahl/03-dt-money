@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useState } from "react";
 import { createContext } from "use-context-selector";
 import { api } from "../lib/axios";
 
@@ -33,7 +33,7 @@ export const TransactionsContext = createContext({} as TransactionContextType);
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
 	const [transactions, setTransactions] = useState<Transactions[]>([]);
 
-	const fetchTransactions = async (query?: string) => {
+	const fetchTransactions = useCallback(async (query?: string) => {
 		const response = await api.get("transactions", {
 			params: {
 				_sort: "createdAt",
@@ -43,26 +43,28 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
 		});
 
 		setTransactions(response.data);
-	};
+	}, []);
 
-	const createTransaction = async (data: CreateTransactionInput) => {
-		const { category, description, price, type } = data;
+	const createTransaction = useCallback(
+		async (data: CreateTransactionInput) => {
+			const { category, description, price, type } = data;
 
-		const response = await api.post("transactions", {
-			category,
-			description,
-			price,
-			type,
-			createdAt: new Date(),
-		});
+			const response = await api.post("transactions", {
+				category,
+				description,
+				price,
+				type,
+				createdAt: new Date(),
+			});
 
-		setTransactions((state) => [response.data, ...state]);
-	};
+			setTransactions((state) => [response.data, ...state]);
+		},
+		[],
+	);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		fetchTransactions();
-	}, []);
+	}, [fetchTransactions]);
 
 	return (
 		<TransactionsContext.Provider
